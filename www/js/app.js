@@ -6,69 +6,63 @@
 // 'cb.controllers' is found in controllers.js
 angular.module('cb', ['ionic', 'cb.controllers'])
 
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if (window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      cordova.plugins.Keyboard.disableScroll(true);
+  .run(function ($ionicPlatform) {
+    $ionicPlatform.ready(function () {
+      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+      // for form inputs)
+      if (window.cordova && window.cordova.plugins.Keyboard) {
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.disableScroll(true);
 
-    }
-    if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
-      StatusBar.styleDefault();
-    }
-  });
-})
-
-.config(function($stateProvider, $urlRouterProvider) {
-  $stateProvider
-
-    .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'views/menu.html',
-    controller: 'AppCtrl'
+      }
+      if (window.StatusBar) {
+        // org.apache.cordova.statusbar required
+        StatusBar.styleDefault();
+      }
+    });
   })
 
-  .state('app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'views/search.html'
-      }
-    }
-  })
+  .config(function ($stateProvider, $urlRouterProvider) {
+    $stateProvider
 
-  .state('app.browse', {
-      url: '/browse',
-      views: {
-        'menuContent': {
-          templateUrl: 'views/browse.html'
-        }
-      }
-    })
-    .state('app.news', {
-      url: '/news',
-      views: {
-        'menuContent': {
-          templateUrl: 'views/playlists.html',
-          controller: 'PlaylistsCtrl'
-        }
-      }
-    })
+      .state('app', {
+        url: '/app',
+        abstract: true,
+        templateUrl: 'views/menu.html',
+        controller: 'AppCtrl'
+      })
 
-  .state('app.announcement', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'views/playlist.html',
-        controller: 'PlaylistCtrl'
-      }
-    }
-  });
+      .state('app.search', {
+        url: '/search',
+        views: {
+          'menuContent': {
+            templateUrl: 'views/search.html'
+          }
+        }
+      })
+
+      .state('app.news', {
+        url: '/news',
+        views: {
+          'menuContent': {
+            templateUrl: 'views/news.html',
+            controller: 'newsCtrl'
+          }
+        }
+      })
+      
+      
+      
+      
+     .state('app.cougarvision', {
+        url: '/cougarvision',
+        views: {
+          'menuContent': {
+            templateUrl: 'views/cougarvision.html'
+          }
+        }
+      });
   
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/news');
-});
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/news');
+  });
