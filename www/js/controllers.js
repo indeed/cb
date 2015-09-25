@@ -10,3 +10,5 @@ app.controller('newsCtrl', function($scope) {
 
 .controller('newsItemCtrl', function($scope, $stateParams) {
 });
+
+
