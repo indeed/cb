@@ -5,6 +5,9 @@
     "ionic": "driftyco/ionic-bower#1.1.0"
   },
   "dependencies": {
+    "ionic-ion-header-shrink": "*",
+    "moment": "~2.10.6",
+    "ngGAPI": "https://github.com/christiansmith/ngGAPI.git",
     "roboto-fontface": "~0.4.3"
   }
 }

@@ -1,36 +1,36 @@
-<ion-side-menus enable-menu-with-back-views="false">
-  <ion-side-menu-content>
-    <ion-nav-bar class="bar-stable">
-      <ion-nav-back-button>
-      </ion-nav-back-button>
+<ion-side-menus enable-menu-with-back-views="true">
+    <ion-side-menu-content>
+        <ion-nav-bar class="bar-positive">
+            <ion-nav-back-button>
+            </ion-nav-back-button>
 
-      <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-        </button>
-      </ion-nav-buttons>
-    </ion-nav-bar>
-    <ion-nav-view name="menuContent"></ion-nav-view>
-  </ion-side-menu-content>
+            <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-nav-view name="menuContent"></ion-nav-view>
+    </ion-side-menu-content>
 
-  <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">Left</h1>
-    </ion-header-bar>
-    <ion-content>
-      <ion-list>
-        <ion-item menu-close ng-click="login()">
-          Login
-        </ion-item>
-        <ion-item menu-close href="#/app/news">
-          News
-        </ion-item>
-        <ion-item menu-close href="#/app/search">
-          Search
-        </ion-item>
-        <ion-item menu-close href="#/app/cougarvision">
-          Cougarvision
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
+    <ion-side-menu side="left">
+        <ion-header-bar class="expanded bar bar-header">
+            <ion-item class="item-image item-stable avatar"><img src="../img/logo.png"></ion-item>
+            <ion-item class="headerText light"><span>{{cycleDay}}</span>Period 3&nbsp;&nbsp;<i class="icon ion-ios-arrow-forward"></i>&nbsp;&nbsp;Physics</ion-item>
+        </ion-header-bar>
+        <ion-content class="has-expanded-header">
+            <ion-list>
+                <ion-item ng-repeat="view in views" class="borderless item-icon-left" ng-class="{'item-positive': isViewSelected('{{view.ref}}')}" menu-close href="#/app/{{view.ref}}">
+                    <i class="icon menu-icon" ng-class="'{{view.icon}}'"></i>
+                    &nbsp;{{view.name}}
+                </ion-item>
+                <ion-item class="item no-padding no-margin">
+                </ion-item>
+                <ion-item class="borderless item-icon-left" menu-close href="#">
+                    <i class="icon menu-icon ion-android-settings"></i>
+                    &nbsp;Settings
+                </ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
+
+
 </ion-side-menus>

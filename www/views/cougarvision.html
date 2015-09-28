@@ -1,5 +1,52 @@
-<ion-view view-title="CougarVision">
-  <ion-content>
-    <h1>cv</h1>
-  </ion-content>
+<ion-view view-title="CougarVision" nav-bar-class="bar-positive" hide-back-button="true">
+
+    <ion-content padding="true" class="bg-poly" scrollbar-y="false" has-bouncing="true">
+        <ion-refresher pulling-text="Pull to refresh"
+                       on-refresh="refreshContent()">
+        </ion-refresher>
+
+        <div class="list card no-padding" style="margin-top:0;">
+            <div class="button-bar">
+                <a class="button button-dark button-clear icon-left ion-calendar">Select Date</a>
+                <a class="button button-dark button-clear">This Week</a>
+                <a class="button button-dark button-clear icon-right ion-android-arrow-dropdown" ng-click="filterModal()">{{filter.selected.name}}</a>
+            </div>
+        </div>
+
+        <div class="no-padding" ng-repeat="episode in episodes | filter:filter.selected.filter track by episode.date">
+            <div class="list card animated fadeInUp no-padding no-margin">
+                <div href="#" class="item light no-padding" style="background-image: url(img/cb.jpg)">
+                    <div class="fill" style="background-color: rgba(0,0,0,0.4)">
+                        <span class="text-large text-light"><i class="icon ion-videocamera"></i>&nbsp;&nbsp;{{episode.day}} Show</span>
+                        <span class="item-note stable text-light stable">
+                            <i class="icon ion-android-time"></i>&nbsp;&nbsp;{{episode.date}}
+                        </span>
+                    </div>
+                </div>
+                <a class="item padding-small" href="#">
+                    <span class="dark"><i class="icon ion-play"></i>&nbsp;&nbsp;Watch</span>
+                    <span class="item-note off">
+                        <i class="icon ion-eye"></i>&nbsp;&nbsp;{{episode.views}}
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <script id="cvFilterModal.html" type="text/ng-template">
+            <div class="modal" ng-controller="filterModalCtrl">
+                <ion-header-bar class="bar bar-header bar-positive">
+                    <h1 class="title">Filter by Day</h1>
+                    <button class="button button-clear button-primary" ng-click="hideModal()">Cancel</button>
+                </ion-header-bar>
+                <ion-content>
+                    <div class="list">
+                        <ion-radio ng-value="day" ng-model="filter.selected" ng-repeat="day in filterDays" ng-click="hideModalAction(day)">
+                            <i class="icon ion-android-calendar"></i>&nbsp;&nbsp;{{day.name}}
+                        </ion-radio>
+                    </div>
+                </ion-content>
+            </div>
+        </script>
+
+    </ion-content>
 </ion-view>
