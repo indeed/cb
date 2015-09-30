@@ -4,7 +4,11 @@
 }
 
 .padding-small {
-    padding: 0.7em !important;
+    padding: 0 !important;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
 }
 
 .no-margin {
@@ -14,12 +18,6 @@
 .item {
     background-size: cover !important;
     background-position: center !important;
-}
-
-.bg-poly {
-    background-image: url(../img/polybg.jpg);
-    background-size: cover;
-    background-position: center;
 }
 
 .fill {
@@ -41,6 +39,8 @@
 .card {
     box-shadow: none !important;
     border-bottom: 2px solid #BBB !important;
+    border-radius: 3px;
+    
 }
 
 .bar-header.expanded {
@@ -101,4 +101,21 @@
     margin-bottom:0.2em;
     display:block;
     text-transform: uppercase;
+}
+
+.bg {
+    background-size: cover;
+    background-position: center;
+}
+
+.bg.bg-poly {
+    background-image: url(../img/polybg.jpg);
+}
+
+.bg.bg-cb {
+    background-image: url(../img/cb.jpg);
+}
+
+.bg.bg-cb2 {
+    background-image: url(../img/cb2.jpg);
 }

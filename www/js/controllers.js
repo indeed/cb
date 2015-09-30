@@ -1,5 +1,34 @@
 var app = angular.module('cb.controllers', []);
 
+// Main app & menu controller
+app.controller('menuCtrl', function ($scope, $ionicHistory, calendarService) {
+
+    $scope.views = [
+        { name: "News", ref: "news", icon: "ion-android-notifications" },
+        { name: "Classes", ref: "classes", icon: "ion-university" },
+        { name: "CougarVision", ref: "cougarvision", icon: "ion-ios-videocam" },
+        { name: "Calendar", ref: "calendar", icon: "ion-android-calendar" },
+    ];
+
+    // Display current day in cycle as menu header
+    $scope.cycleDay = {};
+
+    calendarService.getDayEvents(moment().add(0, "days")).then(function (response) {
+        var events = calendarService.parseEvents(response);
+        $scope.cycleDay = calendarService.getCycleDay(events);
+    });
+
+    // Highlight current view in menu
+    $scope.isViewSelected = function (name) {
+        if ($ionicHistory.currentStateName() == 'app.' + name) {
+            return true
+        } else {
+            return false
+        }
+    };
+
+});
+
 // Cougarvision view
 app.controller('cvCtrl', function ($scope, $rootScope, $ionicPopover, $ionicModal) {
 
@@ -60,38 +89,41 @@ app.controller('filterModalCtrl', function ($scope) {
 
 });
 
+// News & announcements view
 app.controller('newsCtrl', function ($scope) {
 
 
 });
 
-app.controller('menuCtrl', function ($scope, $ionicHistory, calendarService) {
-
-    $scope.views = [
-        { name: "News", ref: "news", icon: "ion-android-notifications" },
-        { name: "Classes", ref: "classes", icon: "ion-university" },
-        { name: "CougarVision", ref: "cougarvision", icon: "ion-ios-videocam" },
-        { name: "Calendar", ref: "calendar", icon: "ion-android-calendar" },
-    ];
-
-    // Display current day in cycle as menu header
-    $scope.cycleDay = {};
-
-    calendarService.getDayEvents(moment().add(0, "days")).then(function (response) {
-        var events = calendarService.parseEvents(response);
-        $scope.cycleDay = calendarService.getCycleDay(events);
+// View to set and view courses
+app.controller('classCtrl', function ($scope, $localStorage) {
+    $scope.$storage = $localStorage.$default({
+        classes: {
+            _1A: { subject: "None", room: "No Room" },
+            _1B: { subject: "None", room: "No Room" },
+            _1C: { subject: "None", room: "No Room" },
+            _1D: { subject: "None", room: "No Room" },
+            _2A: { subject: "None", room: "No Room" },
+            _2B: { subject: "None", room: "No Room" },
+            _2C: { subject: "None", room: "No Room" },
+            _2D: { subject: "None", room: "No Room" },
+        }
     });
 
-    // Highlight current view in menu
-    $scope.isViewSelected = function (name) {
-        if ($ionicHistory.currentStateName() == 'app.' + name) {
-            return true
-        } else {
-            return false
-        }
+    $scope.periods = {
+        _1A: { name: "1A", day: 1, period: 1 },
+        _1B: { name: "1B", day: 1, period: 2 },
+        _1C: { name: "1C", day: 1, period: 3 },
+        _1D: { name: "1D", day: 1, period: 4 },
+        _2A: { name: "2A", day: 2, period: 1 },
+        _2B: { name: "2B", day: 2, period: 2 },
+        _2C: { name: "2C", day: 2, period: 3 },
+        _2D: { name: "2D", day: 2, period: 4 },
     };
 
+
 });
+
 
 app.controller('newsItemCtrl', function ($scope, $stateParams) {
 });

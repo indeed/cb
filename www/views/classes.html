@@ -1,6 +1,26 @@
-<ion-view view-title="Classes" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive">
+<ion-view view-title="Classes" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-cb2">
+    <ion-content nav-bar-class="bar-positive" padding="true">
 
-    <ion-content nav-bar-class="bar-positive">
-        ok
+        <div class="list card animated fadeInUp" ng-repeat="period in periods">
+            <div class="item item-positive item-icon-left ">
+                <i class="menu-icon icon ion-android-time"></i>Period {{period.name}}
+                <span class="item-note stable">
+                    Day {{period.day}} Period {{period.period}}
+                </span>
+            </div>
+            <div class="item item-icon-left">
+                <i class="menu-icon icon ion-university"></i>
+                <div class="row no-padding no-margin">
+                    <div class="col col no-padding no-margin">
+                        French
+                        <br><h3 class="dark">Room 215</h3>
+                    </div>
+                    <div class="col-20 no-padding no-margin">
+                        <a class="item positive text-center" style="padding: 0.5em">EDIT</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </ion-content>
 </ion-view>
