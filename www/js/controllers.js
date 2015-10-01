@@ -96,34 +96,55 @@ app.controller('newsCtrl', function ($scope) {
 });
 
 // View to set and view courses
-app.controller('classCtrl', function ($scope, $localStorage) {
+app.controller('classCtrl', function ($scope, $localStorage, $ionicModal) {
+
     $scope.$storage = $localStorage.$default({
-        classes: {
-            _1A: { subject: "None", room: "No Room" },
-            _1B: { subject: "None", room: "No Room" },
-            _1C: { subject: "None", room: "No Room" },
-            _1D: { subject: "None", room: "No Room" },
-            _2A: { subject: "None", room: "No Room" },
-            _2B: { subject: "None", room: "No Room" },
-            _2C: { subject: "None", room: "No Room" },
-            _2D: { subject: "None", room: "No Room" },
-        }
+        classes: [
+            { name: "1A", day: 1, period: 1, subject: "None", code: "No class", room: "" },
+            { name: "1B", day: 1, period: 2, subject: "None", code: "No class", room: "" },
+            { name: "1C", day: 1, period: 3, subject: "None", code: "No class", room: "" },
+            { name: "1D", day: 1, period: 4, subject: "None", code: "No class", room: "" },
+            { name: "2A", day: 2, period: 1, subject: "None", code: "No class", room: "" },
+            { name: "2B", day: 2, period: 2, subject: "None", code: "No class", room: "" },
+            { name: "2C", day: 2, period: 3, subject: "None", code: "No class", room: "" },
+            { name: "2D", day: 2, period: 4, subject: "None", code: "No class", room: "" },
+        ]
     });
 
-    $scope.periods = {
-        _1A: { name: "1A", day: 1, period: 1 },
-        _1B: { name: "1B", day: 1, period: 2 },
-        _1C: { name: "1C", day: 1, period: 3 },
-        _1D: { name: "1D", day: 1, period: 4 },
-        _2A: { name: "2A", day: 2, period: 1 },
-        _2B: { name: "2B", day: 2, period: 2 },
-        _2C: { name: "2C", day: 2, period: 3 },
-        _2D: { name: "2D", day: 2, period: 4 },
+    // Class edit modal
+    $ionicModal.fromTemplateUrl('classModal.html', function (modal) {
+        $scope.modalCtrl = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-up',
+        focusFirstInput: true
+    });
+
+    $scope.classModal = function (obj) {
+        $scope.modalCtrl.class = obj;
+        $scope.modalCtrl.show();
     };
 
+});
+
+// Modal to edit class list
+app.controller('classModalCtrl', function ($scope) {
+
+    $scope.hideModal = function (selected) {
+        $scope.modalCtrl.hide();
+    };
+
+    $scope.hideModalAction = function (selected) {
+        $scope.modalCtrl.hide();
+        $scope.modalCtrl.class.subject = $scope.modalCtrl.temp.subject
+        $scope.modalCtrl.class.code = $scope.modalCtrl.temp.code
+        $scope.modalCtrl.class.room = $scope.modalCtrl.temp.room
+        $scope.modalCtrl.temp = {};
+    };
 
 });
 
 
 app.controller('newsItemCtrl', function ($scope, $stateParams) {
 });
+    

@@ -3,6 +3,7 @@
 //Google API get public calendar
 var gapiCalendarGET = "https://www.googleapis.com/calendar/v3/calendars/ocdsb.ca_9dul7c0nu4poqkgbhsfu0qe2t0@group.calendar.google.com/events?key=AIzaSyB4JbJ8B3jPBr-uwqLkF6p-qD7lzBIadgw";
 
+// Service for calendar and events
 app.factory('calendarService', function ($http) {
     return {
 
@@ -30,6 +31,20 @@ app.factory('calendarService', function ($http) {
         parseEvents: function (data) {
             return angular.fromJson(data).data.items
         }
+    }
+
+});
+
+// Service for class schedules
+app.factory('classService', function () {
+
+    return {
+        getPeriod: function (time) {
+            return
+        },
+        getClass: function (period) {
+            return
+        },
     }
 
 })

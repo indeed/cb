@@ -4,7 +4,7 @@
 }
 
 .padding-small {
-    padding: 0 !important;
+    padding: 0.7em !important;
 }
 
 .no-margin-bottom {
@@ -41,6 +41,16 @@
     border-bottom: 2px solid #BBB !important;
     border-radius: 3px;
     
+}
+
+.float-right {
+    float: right;
+    display:inline;
+}
+
+.float-left {
+    float: left;
+    display:inline;
 }
 
 .bar-header.expanded {

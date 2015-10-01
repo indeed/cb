@@ -1,26 +1,57 @@
-<ion-view view-title="Classes" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-cb2">
+<ion-view view-title="Classes" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-poly">
     <ion-content nav-bar-class="bar-positive" padding="true">
-
-        <div class="list card animated fadeInUp" ng-repeat="period in periods">
+        <div class="list list-inset">
+            <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" placeholder="Search" ng-model="filter">
+            </label>
+        </div>
+        <div class="list card animated fadeInUp" ng-repeat="class in $storage.classes | filter: filter">
             <div class="item item-positive item-icon-left ">
-                <i class="menu-icon icon ion-android-time"></i>Period {{period.name}}
+                <i class="menu-icon icon ion-android-time"></i>Period {{class.name}}
                 <span class="item-note stable">
-                    Day {{period.day}} Period {{period.period}}
+                    Day {{class.day}} Period {{class.period}}
                 </span>
             </div>
             <div class="item item-icon-left">
                 <i class="menu-icon icon ion-university"></i>
-                <div class="row no-padding no-margin">
-                    <div class="col col no-padding no-margin">
-                        French
-                        <br><h3 class="dark">Room 215</h3>
+                <div class="row no-margin no-padding">
+                    <div class="col no-padding no-margin">
+                        {{class.subject}}
+                        <br><h3 class="dark">{{class.code}}&nbsp;&nbsp;<i class="ion-grid"></i>&nbsp;&nbsp;{{class.room}}</h3>
                     </div>
-                    <div class="col-20 no-padding no-margin">
-                        <a class="item positive text-center" style="padding: 0.5em">EDIT</a>
-                    </div>
+                    <a class="button button-small button-outline button-positive no-margin" style="padding:0.4em" ng-click="classModal(class)">EDIT</a>
+
                 </div>
             </div>
         </div>
-
     </ion-content>
 </ion-view>
+
+<script id="classModal.html" type="text/ng-template">
+    <div class="modal" ng-controller="classModalCtrl">
+        <ion-header-bar class="bar bar-header bar-positive">
+            <h1 class="title">Edit {{modalCtrl.class.name}} Class</h1>
+            <button class="button button-clear button-primary" ng-click="hideModal()">Cancel</button>
+        </ion-header-bar>
+        <ion-content>
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Course Name</span>
+                    <input type="text" placeholder="English" ng-model="modalCtrl.temp.subject">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Course Code</span>
+                    <input type="text" placeholder="ENG3UE" ng-model="modalCtrl.temp.code">
+                </label>
+                <label class="item item-input item-stacked-label">
+                    <span class="input-label">Classroom</span>
+                    <input type="text" placeholder="Room 130" ng-model="modalCtrl.temp.room">
+                </label>
+            </div>
+            <div ng-class="{'disabled': !modalCtrl.temp.subject || !modalCtrl.temp.code || !modalCtrl.temp.room}" class="button button-positive button-block" ng-click="hideModalAction()">
+                OK
+            </div>
+        </ion-content>
+    </div>
+</script>

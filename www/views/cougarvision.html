@@ -31,22 +31,21 @@
                 </a>
             </div>
         </div>
-
-        <script id="cvFilterModal.html" type="text/ng-template">
-            <div class="modal" ng-controller="filterModalCtrl">
-                <ion-header-bar class="bar bar-header bar-positive">
-                    <h1 class="title">Filter by Day</h1>
-                    <button class="button button-clear button-primary" ng-click="hideModal()">Cancel</button>
-                </ion-header-bar>
-                <ion-content>
-                    <div class="list">
-                        <ion-radio ng-value="day" ng-model="filter.selected" ng-repeat="day in filterDays" ng-click="hideModalAction(day)">
-                            <i class="icon ion-android-calendar"></i>&nbsp;&nbsp;{{day.name}}
-                        </ion-radio>
-                    </div>
-                </ion-content>
-            </div>
-        </script>
-
     </ion-content>
 </ion-view>
+
+<script id="cvFilterModal.html" type="text/ng-template">
+    <div class="modal" ng-controller="filterModalCtrl">
+        <ion-header-bar class="bar bar-header bar-positive">
+            <h1 class="title">Filter by Day</h1>
+            <button class="button button-clear button-primary" ng-click="hideModal()">Cancel</button>
+        </ion-header-bar>
+        <ion-content>
+            <div class="list">
+                <ion-radio ng-value="day" ng-model="filter.selected" ng-repeat="day in filterDays" ng-click="hideModalAction(day)">
+                    <i class="icon ion-android-calendar"></i>&nbsp;&nbsp;{{day.name}}
+                </ion-radio>
+            </div>
+        </ion-content>
+    </div>
+</script>
