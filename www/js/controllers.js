@@ -1,7 +1,7 @@
 var app = angular.module('cb.controllers', []);
 
 // Main app & menu controller
-app.controller('menuCtrl', function ($scope, $ionicHistory, calendarService) {
+app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localStorage, calendarService, classService) {
 
     $scope.views = [
         { name: "News", ref: "news", icon: "ion-android-notifications" },
@@ -11,7 +11,7 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, calendarService) {
     ];
 
     // Display current day in cycle as menu header
-    $scope.cycleDay = {};
+    $scope.cycleDay = "";
 
     calendarService.getDayEvents(moment().add(0, "days")).then(function (response) {
         var events = calendarService.parseEvents(response);
@@ -26,6 +26,33 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, calendarService) {
             return false
         }
     };
+
+    // Class periods
+    $scope.currentPeriod = "Period -";
+    $scope.currentClass = "N/A";
+
+    $interval(function () {
+        if ($scope.cycleDay !== "" && $scope.cycleDay !== "No school") {
+            var period = classService.getPeriod(moment());
+            console.log(period)
+            if (period == 0) {
+                $scope.currentPeriod = "Lunch";
+                $scope.currentClass = "N/A";
+            } else if (period == 5) {
+                $scope.currentPeriod = "After school";
+            } else {
+                if ($scope.cycleDay == "Day 1" || $scope.cycleDay == "Day 3") {
+                    $scope.currentPeriod = "Period " + period;
+                    $scope.currentClass = $localStorage.classes[period - 1].subject;
+                } else {
+                    $scope.currentPeriod = "Period " + period;
+                    $scope.currentClass = $localStorage.classes[period + 3].subject;
+                }
+            }
+            classService.getPeriod(moment())
+        }
+        
+    }, 1000);
 
 });
 
