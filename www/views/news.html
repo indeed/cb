@@ -1,7 +1,13 @@
 <ion-view view-title="News" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive">
+        <ion-tabs class="tabs-positive tabs-icon-top tabs-striped">
 
-    <ion-content>
-        {{response}}
-        {{today}}
-    </ion-content>
+            <ion-tab title="Announcements" icon="ion-android-notifications">
+                <ion-content>swag</ion-content>
+            </ion-tab>
+
+            <ion-tab title="Newsletter" icon="ion-ios-paper">
+                <ion-content><div ng-bind-html="test"></div></ion-content>
+            </ion-tab>
+
+        </ion-tabs>
 </ion-view>

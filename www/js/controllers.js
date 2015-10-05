@@ -51,7 +51,7 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
             }
             classService.getPeriod(moment())
         }
-        
+
     }, 1000);
 
 });
@@ -117,8 +117,13 @@ app.controller('filterModalCtrl', function ($scope) {
 });
 
 // News & announcements view
-app.controller('newsCtrl', function ($scope) {
+app.controller('newsCtrl', function ($scope, $http, $sce) {
 
+    $scope.test = {};
+
+    $http.get('http://www.colonelby.com/news.html').then(function (response) {
+        $scope.test = $sce.trustAsHtml(response.data);
+    });
 
 });
 
@@ -174,4 +179,3 @@ app.controller('classModalCtrl', function ($scope) {
 
 app.controller('newsItemCtrl', function ($scope, $stateParams) {
 });
-    
