@@ -32,6 +32,14 @@
     font-size: 1.2em;
 }
 
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.text-huge {
+    font-size: 2.2em;
+}
+
 .text-light {
     font-weight: 300;
 }
@@ -122,10 +130,28 @@
     background-image: url(../img/polybg.jpg);
 }
 
+.bg.bg-poly-dark {
+    background-image: url(../img/polybg-dark.jpg);
+}
+
 .bg.bg-cb {
     background-image: url(../img/cb.jpg);
 }
 
 .bg.bg-cb2 {
     background-image: url(../img/cb2.jpg);
+}
+
+.bg-transparent {
+    background-color:transparent;
+}
+
+.item.calendar-date {
+    width: 1.5em;
+    height:1.5em;
+    left: 0.25em;
+    border-radius:100%;
+        box-shadow: #BDBDBD 1px 1px;
+        padding-left: 0 !important;
+        padding-right:0 !important;
 }

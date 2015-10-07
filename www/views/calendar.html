@@ -1,10 +1,36 @@
-<ion-view view-title="Calendar" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive">
+<ion-view view-title="Calendar" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-poly-dark">
     <ion-nav-buttons side="right">
         <button class="button button-icon" ng-click="doSomething()">
             <i class="icon ion-android-more-vertical"></i>
         </button>
     </ion-nav-buttons>
     <ion-content>
-        
+        <div class="list list-inset">
+            <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" placeholder="Search" ng-model="filter">
+            </label>
+        </div>
+        <ion-list>
+            <ion-item style="margin: 1em 0 1em 0;" class="row bg-transparent borderless" ng-repeat="day in $storage.calendar | toArray | filter: filter : false track by $index">
+                <ion-item class="col bg-transparent borderless text-center light" style="width:5em; -webkit-box-flex: 0; flex: 0 0 5em; max-width:5em;">
+                    <div class="padding-bottom">{{parseMoment(day.$key, "ddd")}}</div>
+                    <div class="item calendar-date text-huge positive text-light">{{parseMoment(day.$key, "D")}}</div>
+                    <div class="padding-top">{{parseMoment(day.$key, "MMM")}}</div>
+                </ion-item>
+                    <ion-list class="card col no-padding col-top" style="border-radius:5px;">
+                        <ion-item class="" ng-repeat="event in day[day.$key]" ng-hide="!event.wholeDay">
+                            {{event.summary}}
+                            <div class="item-note">All day</div>
+                        </ion-item>
+
+                        <ion-item class="" ng-repeat="event in day[day.$key]" ng-hide="event.wholeDay">
+                            {{event.summary}}
+                            <div class="item-note positive"><i class="icon ion-android-time"></i>&nbsp;&nbsp;{{event.time}}</div>
+                        </ion-item>
+
+                    </ion-list>
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>

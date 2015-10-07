@@ -10,12 +10,12 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
         { name: "Calendar", ref: "calendar", icon: "ion-android-calendar" },
     ];
 
+    $scope.$storage = $localStorage;
     // Display current day in cycle as menu header
-    $scope.cycleDay = "";
 
     calendarService.getDayEvents(moment().add(0, "days")).then(function (response) {
         var events = calendarService.parseEvents(response);
-        $scope.cycleDay = calendarService.getCycleDay(events);
+        $scope.$storage.cycleDay = calendarService.getCycleDay(events);
     });
 
     // Highlight current view in menu
@@ -32,27 +32,27 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
     $scope.currentClass = "N/A";
 
     $interval(function () {
-        if ($scope.cycleDay !== "" && $scope.cycleDay !== "No school") {
-            var period = classService.getPeriod(moment());
-            console.log(period)
-            if (period == 0) {
-                $scope.currentPeriod = "Lunch";
-                $scope.currentClass = "N/A";
-            } else if (period == 5) {
-                $scope.currentPeriod = "After school";
-            } else {
-                if ($scope.cycleDay == "Day 1" || $scope.cycleDay == "Day 3") {
-                    $scope.currentPeriod = "Period " + period;
-                    $scope.currentClass = $localStorage.classes[period - 1].subject;
+        if ($scope.$storage.cycleDay) {
+            if ($scope.$storage.cycleDay !== "" && $scope.$storage.cycleDay !== "No school") {
+                var period = classService.getPeriod(moment());
+                if (period == 0) {
+                    $scope.currentPeriod = "Lunch";
+                    $scope.currentClass = "N/A";
+                } else if (period == 5) {
+                    $scope.currentPeriod = "After school";
                 } else {
-                    $scope.currentPeriod = "Period " + period;
-                    $scope.currentClass = $localStorage.classes[period + 3].subject;
+                    if ($scope.$storage.cycleDay == "Day 1" || $scope.$storage.cycleDay == "Day 3") {
+                        $scope.currentPeriod = "Period " + period;
+                        $scope.currentClass = $localStorage.classes[period - 1].subject;
+                    } else {
+                        $scope.currentPeriod = "Period " + period;
+                        $scope.currentClass = $localStorage.classes[period + 3].subject;
+                    }
                 }
+                classService.getPeriod(moment())
             }
-            classService.getPeriod(moment())
-        }
 
-    }, 1000);
+        }}, 1000);
 
 });
 
@@ -176,6 +176,44 @@ app.controller('classModalCtrl', function ($scope) {
 
 });
 
+// Calendar and events control
+app.controller('calendarCtrl', function ($scope, $localStorage, calendarService) {
+    $scope.$storage = $localStorage;
+
+    $scope.parseMoment = function (time, format) {
+        return moment(time).format(format)
+            
+    }
+
+    calendarService.getEvents(moment()).then(function (response) {
+
+        $scope.$storage.calendar = {};
+
+        var events = calendarService.parseEvents(response);
+
+        for (i in events) {
+            if (events[i].start.date) {
+                if (!$scope.$storage.calendar[events[i].start.date]) {
+                    var obj = {}
+                    obj[events[i].start.date] = [];
+                    $scope.$storage.calendar[events[i].start.date] = obj;
+                }
+                $scope.$storage.calendar[events[i].start.date][events[i].start.date].push({wholeDay: true, summary: events[i].summary});
+            } else if (events[i].start.dateTime) {
+                var date = moment(events[i].start.dateTime).format("YYYY-MM-DD");
+                if (!$scope.$storage.calendar[date]) {
+                    var obj = {}
+                    obj[date] = [];
+                    $scope.$storage.calendar[date] = obj;
+                }
+                $scope.$storage.calendar[date][date].push({wholeDay: false, summary: events[i].summary, time:moment(events[i].start.dateTime).format("h:mm a")});
+            }
+
+        }
+
+    });
+
+});
 
 app.controller('newsItemCtrl', function ($scope, $stateParams) {
 });
