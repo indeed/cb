@@ -4,7 +4,7 @@
 // 'cb' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'cb.controllers' is found in controllers.js
-var app = angular.module('cb', ['ionic', 'cb.controllers', 'cb.services', 'cb.utils', 'ngTouch', 'ngAnimate', 'ngStorage'])
+var app = angular.module('cb', ['ionic', 'cb.controllers', 'cb.services', 'cb.utils', 'ngTouch', 'ngAnimate', 'ngStorage', 'angular-toArrayFilter'])
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -35,7 +35,8 @@ app.config(function ($stateProvider, $urlRouterProvider) {
               url: '/calendar',
               views: {
                   'menuContent': {
-                      templateUrl: 'views/calendar.html'
+                      templateUrl: 'views/calendar.html',
+                      controller: 'calendarCtrl'
                   }
               }
           })
