@@ -185,7 +185,7 @@ app.controller('calendarCtrl', function ($scope, $localStorage, calendarService)
             
     }
 
-    calendarService.getEvents(moment()).then(function (response) {
+    calendarService.getEvents(moment(), moment().add('month', 1)).then(function (response) {
 
         $scope.$storage.calendar = {};
 

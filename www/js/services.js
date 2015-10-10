@@ -28,10 +28,11 @@ app.factory('calendarService', function ($http) {
         },
 
         //Gets events for days after certain start date
-        getEvents: function (time) {
+        getEvents: function (start, end) {
             return $http.get(gapiCalendarMain, {
                 params: {
-                    timeMin: time.startOf('day').format(),
+                    timeMin: start.startOf('day').format(),
+                    timeMax: end.startOf('day').format(),
                     orderBy: "startTime",
                     singleEvents: true
                 }

@@ -19,12 +19,12 @@
                     <div class="padding-top">{{parseMoment(day.$key, "MMM")}}</div>
                 </ion-item>
                     <ion-list class="card col no-padding col-top" style="border-radius:5px;">
-                        <ion-item class="" ng-repeat="event in day[day.$key]" ng-hide="!event.wholeDay">
+                        <ion-item class="" ng-repeat="event in day[day.$key] | filter: filter : false" ng-hide="!event.wholeDay">
                             {{event.summary}}
                             <div class="item-note">All day</div>
                         </ion-item>
 
-                        <ion-item class="" ng-repeat="event in day[day.$key]" ng-hide="event.wholeDay">
+                        <ion-item class="" ng-repeat="event in day[day.$key] | filter: filter : false" ng-hide="event.wholeDay">
                             {{event.summary}}
                             <div class="item-note positive"><i class="icon ion-android-time"></i>&nbsp;&nbsp;{{event.time}}</div>
                         </ion-item>
