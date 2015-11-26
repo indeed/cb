@@ -4,7 +4,7 @@
 // 'cb' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'cb.controllers' is found in controllers.js
-var app = angular.module('cb', ['ionic', 'cb.controllers', 'cb.services', 'cb.utils', 'ngTouch', 'ngAnimate', 'ngStorage', 'angular-toArrayFilter'])
+var app = angular.module('cb', ['ionic', 'cb.controllers', 'cb.services', 'cb.utils', 'ngTouch', 'ngAnimate', 'ngStorage', 'angular-toArrayFilter', 'firebase'])
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {

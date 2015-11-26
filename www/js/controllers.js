@@ -59,13 +59,13 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
 // Cougarvision view
 app.controller('cvCtrl', function ($scope, $rootScope, $ionicPopover, $ionicModal) {
 
-    $scope.days = [
-    { name: "Monday" },
-    { name: "Tuesday" },
-    { name: "Wednesday" },
-    { name: "Thursday" },
-    { name: "Friday" },
-    ];
+    var episodesRef = {
+        mon: "http://colonelby.com/mon.mov",
+        tue: "http://colonelby.com/sportsdesk.mov",
+        wed: "http://colonelby.com/wed.mov",
+        thu: "http://colonelby.com/thurs.mov",
+        fri: "http://colonelby.com/fri.mov",
+    };
 
     $scope.filterDays = [
     { name: "All episodes", filter: "", selected: true },
@@ -177,12 +177,11 @@ app.controller('classModalCtrl', function ($scope) {
 });
 
 // Calendar and events control
-app.controller('calendarCtrl', function ($scope, $localStorage, calendarService) {
+app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, calendarService) {
     $scope.$storage = $localStorage;
 
     $scope.parseMoment = function (time, format) {
-        return moment(time).format(format)
-            
+        return moment(time).format(format)    
     }
 
     calendarService.getEvents(moment(), moment().add('month', 1)).then(function (response) {
@@ -211,6 +210,12 @@ app.controller('calendarCtrl', function ($scope, $localStorage, calendarService)
 
         }
 
+    });
+
+    $ionicPopover.fromTemplateUrl('templates/calendarmenu.html', {
+        scope: $scope,
+    }).then(function (calendarmenu) {
+        $scope.calendarmenu = calendarmenu;
     });
 
 });

@@ -12,10 +12,12 @@
     </ion-side-menu-content>
 
     <ion-side-menu side="left">
+
         <ion-header-bar class="expanded bar bar-header">
             <ion-item class="item-image item-stable avatar"><img src="img/logo.png"></ion-item>
             <ion-item class="headerText light"><span>{{$storage.cycleDay}}</span>{{currentPeriod}}&nbsp;&nbsp;<i class="icon ion-ios-arrow-forward"></i>&nbsp;&nbsp;{{currentClass}}</ion-item>
         </ion-header-bar>
+
         <ion-content class="has-expanded-header">
             <ion-list>
                 <ion-item ng-repeat="view in views" class="borderless item-icon-left" ng-class="{'item-positive': isViewSelected('{{view.ref}}')}" menu-close href="#/app/{{view.ref}}">
@@ -31,6 +33,5 @@
             </ion-list>
         </ion-content>
     </ion-side-menu>
-
 
 </ion-side-menus>
