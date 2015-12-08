@@ -79,3 +79,4 @@ app.factory('classService', function () {
     }
 
 })
+

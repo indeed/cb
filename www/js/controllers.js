@@ -1,5 +1,7 @@
 var app = angular.module('cb.controllers', []);
 
+var fireRef = new Firebase("https://cbapp.firebaseio.com");
+
 // Main app & menu controller
 app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localStorage, calendarService, classService) {
 
@@ -52,7 +54,7 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
                 classService.getPeriod(moment())
             }
 
-        }}, 1000);
+        }}, 10000);
 
 });
 
@@ -117,9 +119,24 @@ app.controller('filterModalCtrl', function ($scope) {
 });
 
 // News & announcements view
-app.controller('newsCtrl', function ($scope, $http, $sce) {
+app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject) {
 
-    $scope.test = {};
+    $scope.announcements = $firebaseObject(fireRef.child('announcements'));
+
+    // Change title based on tab
+    $scope.changeTitle = function (title) {
+        $scope.title = title;
+    }
+
+    $scope.moment = {
+        parseWeekday: function (stamp) {
+            return moment(stamp, 'x').format('dddd')
+        },
+        parseDate: function (stamp) {
+            return moment(stamp, 'x').format('MMM Do YYYY')
+        }
+        
+    }
 
     $http.get('http://www.colonelby.com/news.html').then(function (response) {
         $scope.test = $sce.trustAsHtml(response.data);
@@ -184,8 +201,7 @@ app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, c
         return moment(time).format(format)    
     }
 
-    calendarService.getEvents(moment(), moment().add('month', 1)).then(function (response) {
-
+    var parseCalendar = function (response) {
         $scope.$storage.calendar = {};
 
         var events = calendarService.parseEvents(response);
@@ -193,24 +209,24 @@ app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, c
         for (i in events) {
             if (events[i].start.date) {
                 if (!$scope.$storage.calendar[events[i].start.date]) {
-                    var obj = {}
+                    var obj = {};
                     obj[events[i].start.date] = [];
                     $scope.$storage.calendar[events[i].start.date] = obj;
                 }
-                $scope.$storage.calendar[events[i].start.date][events[i].start.date].push({wholeDay: true, summary: events[i].summary});
+                $scope.$storage.calendar[events[i].start.date][events[i].start.date].push({ wholeDay: true, summary: events[i].summary });
             } else if (events[i].start.dateTime) {
                 var date = moment(events[i].start.dateTime).format("YYYY-MM-DD");
                 if (!$scope.$storage.calendar[date]) {
-                    var obj = {}
+                    var obj = {};
                     obj[date] = [];
                     $scope.$storage.calendar[date] = obj;
                 }
-                $scope.$storage.calendar[date][date].push({wholeDay: false, summary: events[i].summary, time:moment(events[i].start.dateTime).format("h:mm a")});
+                $scope.$storage.calendar[date][date].push({ wholeDay: false, summary: events[i].summary, time: moment(events[i].start.dateTime).format("h:mm a") });
             }
-
         }
+    }
 
-    });
+    calendarService.getEvents(moment(), moment().add(1, 'month')).then(parseCalendar);
 
     $ionicPopover.fromTemplateUrl('templates/calendarmenu.html', {
         scope: $scope,
