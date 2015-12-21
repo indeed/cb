@@ -1,9 +1,5 @@
 <ion-view view-title="CougarVision" nav-bar-class="bar-positive" hide-back-button="true" class="bg bg-poly">
-
-    <ion-content padding="true" has-bouncing="true">
-        <ion-refresher pulling-text="Pull to refresh"
-                       on-refresh="refreshContent()">
-        </ion-refresher>
+    <ion-content padding="true">
 
         <div class="list card no-padding" style="margin-top:0;">
             <div class="button-bar">
@@ -13,7 +9,7 @@
         </div>
 
         <div class="no-padding" ng-repeat="episode in episodes | filter:filter.selected.filter track by episode.date">
-            <div class="list card animated fadeInUp no-padding no-margin-bottom">
+            <div class="list card no-padding no-margin-bottom">
                 <div class="item light no-padding bg bg-cb">
                     <div class="fill" style="background-color: rgba(0,0,0,0.4)">
                         <span class="text-large text-light"><i class="icon ion-videocamera"></i>&nbsp;&nbsp;{{episode.day}} Show</span>

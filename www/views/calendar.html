@@ -1,4 +1,4 @@
-<ion-view view-title="Calendar" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-dark">
+<ion-view view-title="Calendar" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-dark">
     <ion-nav-buttons side="right">
         <button class="button button-icon" ng-click="calendarmenu.show($event)">
             <i class="icon ion-android-more-vertical"></i>
@@ -39,13 +39,13 @@
     <ion-popover-view>
         <ion-content>
             <ion-list>
-                <a class="item" href="http://learn.ionicframework.com/" target="_blank">
+                <a class="item" ng-click="setCalendar(1)" href="#">
                     Main
                 </a>
-                <a class="item" href="http://ionicframework.com/docs/" target="_blank">
+                <a class="item" ng-click="setCalendar(2)" href="#">
                     Athletic
                 </a>
-                <a class="item" href="http://showcase.ionicframework.com/" target="_blank">
+                <a class="item" ng-click="setCalendar(3)" href="#">
                     Student Council
                 </a>
             </ion-list>

@@ -22,56 +22,58 @@ app.run(function ($ionicPlatform) {
     })
 });
 
-app.config(function ($stateProvider, $urlRouterProvider) {
-        $stateProvider
-          .state('app', {
-              url: '/app',
-              abstract: true,
-              templateUrl: 'views/menu.html',
-              controller: 'menuCtrl'
-          })
+app.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
-          .state('app.calendar', {
-              url: '/calendar',
-              views: {
-                  'menuContent': {
-                      templateUrl: 'views/calendar.html',
-                      controller: 'calendarCtrl'
-                  }
+    $ionicConfigProvider.tabs.position('bottom');
+
+    $stateProvider
+      .state('app', {
+          url: '/app',
+          abstract: true,
+          templateUrl: 'views/menu.html',
+          controller: 'menuCtrl'
+      })
+
+      .state('app.calendar', {
+          url: '/calendar',
+          views: {
+              'menuContent': {
+                  templateUrl: 'views/calendar.html',
+                  controller: 'calendarCtrl'
               }
-          })
+          }
+      })
 
-          .state('app.classes', {
-              url: '/classes',
-              views: {
-                  'menuContent': {
-                      templateUrl: 'views/classes.html',
-                      controller: 'classCtrl'
-                  }
+      .state('app.classes', {
+          url: '/classes',
+          views: {
+              'menuContent': {
+                  templateUrl: 'views/classes.html',
+                  controller: 'classCtrl'
               }
-          })
+          }
+      })
 
-
-          .state('app.news', {
-              url: '/news',
-              views: {
-                  'menuContent': {
-                      templateUrl: 'views/news.html',
-                      controller: 'newsCtrl'
-                  }
+      .state('app.news', {
+          url: '/news',
+          views: {
+              'menuContent': {
+                  templateUrl: 'views/news.html',
+                  controller: 'newsCtrl'
               }
-          })
+          }
+      })
 
-         .state('app.cougarvision', {
-             url: '/cougarvision',
-             views: {
-                 'menuContent': {
-                     templateUrl: 'views/cougarvision.html',
-                     controller: 'cvCtrl'
-                 }
+     .state('app.cougarvision', {
+         url: '/cougarvision',
+         views: {
+             'menuContent': {
+                 templateUrl: 'views/cougarvision.html',
+                 controller: 'cvCtrl'
              }
-         });
+         }
+     });
 
-        // if none of the above states are matched, use this as the fallback
-        $urlRouterProvider.otherwise('/app/news');
-    });
+    // if none of the above states are matched, use this as the fallback
+    $urlRouterProvider.otherwise('/app/news');
+});

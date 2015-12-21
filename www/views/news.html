@@ -1,9 +1,9 @@
-<ion-view view-title="{{title}}" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive">
+<ion-view view-title="{{title}}" hide-back-button="true" nav-bar-class="bar-positive">
     <ion-tabs class="tabs-positive tabs-icon-top tabs-striped">
 
         <ion-tab title="Announcements" icon="ion-android-notifications" on-select="changeTitle('Announcements')">
-            <ion-content class="bg bg-poly">
-                <div class="list card animated fadeInUp" ng-repeat="(key, value) in announcements | orderByKey: '-' | limitTo: 20">
+            <ion-nav-view class="bg bg-poly has-header">
+                <div class="list card" ng-repeat="(key, value) in announcements | orderByKey: '-' | limitTo: 20">
                     <div class="item item-positive item-icon-left ">
                         <i class="menu-icon icon ion-android-notifications"></i>{{moment.parseWeekday(key)}}
                         <span class="item-note stable">
@@ -14,11 +14,11 @@
                         {{event}}
                     </ion-item>
                 </div>
-            </ion-content>
+            </ion-nav-view>
         </ion-tab>
 
         <ion-tab title="Twitter" icon="ion-social-twitter" on-select="changeTitle('Twitter')">
-            <ion-content><div ng-bind-html="test"></div></ion-content>
+            <ion-nav-view><div ng-bind-html="test"></div></ion-nav-view>
         </ion-tab>
 
     </ion-tabs> 

@@ -36,25 +36,24 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
     $interval(function () {
         if ($scope.$storage.cycleDay) {
             if ($scope.$storage.cycleDay !== "" && $scope.$storage.cycleDay !== "No school") {
-                var period = classService.getPeriod(moment());
-                if (period == 0) {
+                var period = classService.getPeriod(moment(), $scope.$storage.cycleDay);
+                if (period.p == 0) {
                     $scope.currentPeriod = "Lunch";
                     $scope.currentClass = "N/A";
-                } else if (period == 5) {
+                } else if (period.p == 5) {
                     $scope.currentPeriod = "After school";
                 } else {
                     if ($scope.$storage.cycleDay == "Day 1" || $scope.$storage.cycleDay == "Day 3") {
-                        $scope.currentPeriod = "Period " + period;
-                        $scope.currentClass = $localStorage.classes[period - 1].subject;
+                        $scope.currentPeriod = "Period " + period.p;
+                        $scope.currentClass = $scope.$storage.classes[period.c - 1].subject;
                     } else {
-                        $scope.currentPeriod = "Period " + period;
-                        $scope.currentClass = $localStorage.classes[period + 3].subject;
+                        $scope.currentPeriod = "Period " + period.p;
+                        $scope.currentClass = $scope.$storage.classes[period.c + 3].subject;
                     }
                 }
-                classService.getPeriod(moment())
             }
 
-        }}, 10000);
+        }}, 2000);
 
 });
 
@@ -119,13 +118,18 @@ app.controller('filterModalCtrl', function ($scope) {
 });
 
 // News & announcements view
-app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject) {
+app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject, $ionicNavBarDelegate) {
 
     $scope.announcements = $firebaseObject(fireRef.child('announcements'));
 
     // Change title based on tab
+    $scope.title = "Announcements";
+
+    $ionicNavBarDelegate.align();
+
     $scope.changeTitle = function (title) {
         $scope.title = title;
+        $ionicNavBarDelegate.align();
     }
 
     $scope.moment = {
@@ -135,7 +139,6 @@ app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject) {
         parseDate: function (stamp) {
             return moment(stamp, 'x').format('MMM Do YYYY')
         }
-        
     }
 
     $http.get('http://www.colonelby.com/news.html').then(function (response) {
@@ -195,12 +198,14 @@ app.controller('classModalCtrl', function ($scope) {
 
 // Calendar and events control
 app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, calendarService) {
+
     $scope.$storage = $localStorage;
 
     $scope.parseMoment = function (time, format) {
         return moment(time).format(format)    
     }
 
+    // Main method to generate calendar object
     var parseCalendar = function (response) {
         $scope.$storage.calendar = {};
 
@@ -226,13 +231,19 @@ app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, c
         }
     }
 
-    calendarService.getEvents(moment(), moment().add(1, 'month')).then(parseCalendar);
+    calendarService.getEvents(moment(), moment().add(1, 'month'), 1).then(parseCalendar);
 
+    // Manage menu for switching school calendars
     $ionicPopover.fromTemplateUrl('templates/calendarmenu.html', {
         scope: $scope,
     }).then(function (calendarmenu) {
         $scope.calendarmenu = calendarmenu;
     });
+
+    $scope.setCalendar = function (type) {
+        calendarService.getEvents(moment(), moment().add(1, 'month'), type).then(parseCalendar);
+        $scope.calendarmenu.hide();
+    }
 
 });
 
