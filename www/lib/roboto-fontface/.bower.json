@@ -81,6 +81,5 @@
   },
   "_source": "git://github.com/choffmeister/roboto-fontface-bower.git",
   "_target": "~0.4.3",
-  "_originalSource": "roboto-fontface",
-  "_direct": true
+  "_originalSource": "roboto-fontface"
 }

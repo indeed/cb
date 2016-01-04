@@ -1,11 +1,12 @@
 <ion-side-menus enable-menu-with-back-views="true">
+
     <ion-side-menu-content>
         <ion-nav-bar class="bar-positive">
             <ion-nav-back-button>
             </ion-nav-back-button>
 
             <ion-nav-buttons side="left">
-                <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+                <button class="button button-icon button-clear ion-android-menu" menu-toggle="left"></button>
             </ion-nav-buttons>
 
         </ion-nav-bar>
@@ -21,13 +22,13 @@
 
         <ion-content class="has-expanded-header">
             <ion-list>
-                <ion-item ng-repeat="view in views" class="borderless item-icon-left" ng-class="{'item-positive': isViewSelected('{{view.ref}}')}" menu-close href="#/app/{{view.ref}}">
+                <ion-item ng-repeat="view in views" class="borderless item-icon-left menu-item" ng-class="{'item-positive': isViewSelected('{{view.ref}}')}" menu-close href="#/app/{{view.ref}}">
                     <i class="icon menu-icon" ng-class="'{{view.icon}}'"></i>
                     &nbsp;{{view.name}}
                 </ion-item>
                 <ion-item class="item no-padding no-margin">
                 </ion-item>
-                <ion-item class="borderless item-icon-left" menu-close href="#">
+                <ion-item class="borderless menu-item item-icon-left" href="#" ng-click="settingsModal()">
                     <i class="icon menu-icon ion-android-settings"></i>
                     &nbsp;Settings
                 </ion-item>
@@ -36,3 +37,18 @@
     </ion-side-menu>
 
 </ion-side-menus>
+
+<script id="settingsModal.html" type="text/ng-template">
+    <div class="modal" ng-controller="settingsModalCtrl">
+        <ion-header-bar class="bar bar-header bar-positive">
+            <span class="left-buttons">
+                <button class="button button-clear button-icon ion-android-arrow-back" ng-click="hideModal()"><i class="icon"></i></button>
+            </span>
+            <h1 class="title">Settings</h1>
+        </ion-header-bar>
+        <ion-content>
+            <div class="list">
+            </div>
+        </ion-content>
+    </div>
+</script>

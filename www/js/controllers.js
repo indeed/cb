@@ -3,7 +3,7 @@ var app = angular.module('cb.controllers', []);
 var fireRef = new Firebase("https://cbapp.firebaseio.com");
 
 // Main app & menu controller
-app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localStorage, calendarService, classService) {
+app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localStorage, $ionicModal, calendarService, classService) {
 
     $scope.views = [
         { name: "News", ref: "news", icon: "ion-android-notifications" },
@@ -43,6 +43,7 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
                 } else if (period.p == 5) {
                     $scope.currentPeriod = "After school";
                 } else {
+                    //Get current period and class
                     if ($scope.$storage.cycleDay == "Day 1" || $scope.$storage.cycleDay == "Day 3") {
                         $scope.currentPeriod = "Period " + period.p;
                         $scope.currentClass = $scope.$storage.classes[period.c - 1].subject;
@@ -52,21 +53,35 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
                     }
                 }
             }
+        }
+    }, 4200);
 
-        }}, 2000);
+    // Settings opens a modal
+    $ionicModal.fromTemplateUrl('settingsModal.html', function (modal) {
+        $scope.modalCtrl = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-right',
+        focusFirstInput: true
+    });
+
+    $scope.settingsModal = function () {
+        $scope.modalCtrl.show();
+    };
+
+});
+
+// Settings view
+app.controller('settingsModalCtrl', function ($scope) {
+
+    $scope.hideModal = function () {
+        $scope.modalCtrl.hide();
+    };
 
 });
 
 // Cougarvision view
 app.controller('cvCtrl', function ($scope, $rootScope, $ionicPopover, $ionicModal) {
-
-    var episodesRef = {
-        mon: "http://colonelby.com/mon.mov",
-        tue: "http://colonelby.com/sportsdesk.mov",
-        wed: "http://colonelby.com/wed.mov",
-        thu: "http://colonelby.com/thurs.mov",
-        fri: "http://colonelby.com/fri.mov",
-    };
 
     $scope.filterDays = [
     { name: "All episodes", filter: "", selected: true },
@@ -82,12 +97,26 @@ app.controller('cvCtrl', function ($scope, $rootScope, $ionicPopover, $ionicModa
     };
 
     $scope.episodes = [
-        { day: "Monday", date: "Sep 15", views: 420 },
-        { day: "Tuesday", date: "Sep 16", views: 312 },
-        { day: "Wednesday", date: "Sep 17", views: 629 },
-        { day: "Thursday", date: "Sep 18", views: 711 },
-        { day: "Friday", date: "Sep 19", views: 251 },
+        { day: "Monday", date: "Sep 15", views: 420, ref: "http://colonelby.com/mon.mov", bg: "bg-mon" },
+        { day: "Tuesday", date: "Sep 16", views: 312, ref: "http://colonelby.com/sportsdesk.mov", bg: "bg-tue" },
+        { day: "Wednesday", date: "Sep 17", views: 629, ref: "http://colonelby.com/wed.mov", bg: "bg-wed" },
+        { day: "Thursday", date: "Sep 18", views: 711, ref: "http://colonelby.com/thurs.mov", bg: "bg-thu" },
+        { day: "Friday", date: "Sep 19", views: 251, ref: "http://colonelby.com/fri.mov", bg: "bg-fri" },
     ];
+
+    $scope.playVideo = function (videoUrl) {
+
+        // Play a video with callbacks
+        var options = {
+            successCallback: function () {
+                console.log("Video was closed without error.");
+            },
+            errorCallback: function (errMsg) {
+                console.log("Error! " + errMsg);
+            }
+        };
+        window.plugins.streamingMedia.playVideo(videoUrl, options);
+    }
 
     $ionicModal.fromTemplateUrl('cvFilterModal.html', function (modal) {
         $scope.modalCtrl = modal;
@@ -120,8 +149,6 @@ app.controller('filterModalCtrl', function ($scope) {
 // News & announcements view
 app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject, $ionicNavBarDelegate) {
 
-    $scope.announcements = $firebaseObject(fireRef.child('announcements'));
-
     // Change title based on tab
     $scope.title = "Announcements";
 
@@ -132,18 +159,26 @@ app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject, $ioni
         $ionicNavBarDelegate.align();
     }
 
+    $scope.announcements = $firebaseObject(fireRef.child('announcements'));
+
     $scope.moment = {
         parseWeekday: function (stamp) {
-            return moment(stamp, 'x').format('dddd')
+            //return moment(stamp, 'x').format('dddd')
+            return moment(stamp, 'x').calendar(null, {
+                sameDay: '[Today]',
+                nextDay: '[Tomorrow]',
+                nextWeek: 'dddd',
+                lastDay: '[Yesterday]',
+                lastWeek: '[Last] dddd',
+                sameElse: 'DD/MM/YYYY'
+            });
         },
         parseDate: function (stamp) {
             return moment(stamp, 'x').format('MMM Do YYYY')
         }
     }
 
-    $http.get('http://www.colonelby.com/news.html').then(function (response) {
-        $scope.test = $sce.trustAsHtml(response.data);
-    });
+    // TWITTER 
 
 });
 
@@ -202,7 +237,7 @@ app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, c
     $scope.$storage = $localStorage;
 
     $scope.parseMoment = function (time, format) {
-        return moment(time).format(format)    
+        return moment(time).format(format)
     }
 
     // Main method to generate calendar object
