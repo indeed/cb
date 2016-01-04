@@ -1,7 +1,9 @@
 var app = angular.module('cb.controllers', []);
 
+var fireRef = new Firebase("https://cbapp.firebaseio.com");
+
 // Main app & menu controller
-app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localStorage, calendarService, classService) {
+app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localStorage, $ionicModal, calendarService, classService) {
 
     $scope.views = [
         { name: "News", ref: "news", icon: "ion-android-notifications" },
@@ -34,38 +36,52 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
     $interval(function () {
         if ($scope.$storage.cycleDay) {
             if ($scope.$storage.cycleDay !== "" && $scope.$storage.cycleDay !== "No school") {
-                var period = classService.getPeriod(moment());
-                if (period == 0) {
+                var period = classService.getPeriod(moment(), $scope.$storage.cycleDay);
+                if (period.p == 0) {
                     $scope.currentPeriod = "Lunch";
                     $scope.currentClass = "N/A";
-                } else if (period == 5) {
+                } else if (period.p == 5) {
                     $scope.currentPeriod = "After school";
                 } else {
+                    //Get current period and class
                     if ($scope.$storage.cycleDay == "Day 1" || $scope.$storage.cycleDay == "Day 3") {
-                        $scope.currentPeriod = "Period " + period;
-                        $scope.currentClass = $localStorage.classes[period - 1].subject;
+                        $scope.currentPeriod = "Period " + period.p;
+                        $scope.currentClass = $scope.$storage.classes[period.c - 1].subject;
                     } else {
-                        $scope.currentPeriod = "Period " + period;
-                        $scope.currentClass = $localStorage.classes[period + 3].subject;
+                        $scope.currentPeriod = "Period " + period.p;
+                        $scope.currentClass = $scope.$storage.classes[period.c + 3].subject;
                     }
                 }
-                classService.getPeriod(moment())
             }
+        }
+    }, 4200);
 
-        }}, 1000);
+    // Settings opens a modal
+    $ionicModal.fromTemplateUrl('settingsModal.html', function (modal) {
+        $scope.modalCtrl = modal;
+    }, {
+        scope: $scope,
+        animation: 'slide-in-right',
+        focusFirstInput: true
+    });
+
+    $scope.settingsModal = function () {
+        $scope.modalCtrl.show();
+    };
+
+});
+
+// Settings view
+app.controller('settingsModalCtrl', function ($scope) {
+
+    $scope.hideModal = function () {
+        $scope.modalCtrl.hide();
+    };
 
 });
 
 // Cougarvision view
 app.controller('cvCtrl', function ($scope, $rootScope, $ionicPopover, $ionicModal) {
-
-    $scope.days = [
-    { name: "Monday" },
-    { name: "Tuesday" },
-    { name: "Wednesday" },
-    { name: "Thursday" },
-    { name: "Friday" },
-    ];
 
     $scope.filterDays = [
     { name: "All episodes", filter: "", selected: true },
@@ -81,12 +97,26 @@ app.controller('cvCtrl', function ($scope, $rootScope, $ionicPopover, $ionicModa
     };
 
     $scope.episodes = [
-        { day: "Monday", date: "Sep 15", views: 420 },
-        { day: "Tuesday", date: "Sep 16", views: 312 },
-        { day: "Wednesday", date: "Sep 17", views: 629 },
-        { day: "Thursday", date: "Sep 18", views: 711 },
-        { day: "Friday", date: "Sep 19", views: 251 },
+        { day: "Monday", date: "Sep 15", views: 420, ref: "http://colonelby.com/mon.mov", bg: "bg-mon" },
+        { day: "Tuesday", date: "Sep 16", views: 312, ref: "http://colonelby.com/sportsdesk.mov", bg: "bg-tue" },
+        { day: "Wednesday", date: "Sep 17", views: 629, ref: "http://colonelby.com/wed.mov", bg: "bg-wed" },
+        { day: "Thursday", date: "Sep 18", views: 711, ref: "http://colonelby.com/thurs.mov", bg: "bg-thu" },
+        { day: "Friday", date: "Sep 19", views: 251, ref: "http://colonelby.com/fri.mov", bg: "bg-fri" },
     ];
+
+    $scope.playVideo = function (videoUrl) {
+
+        // Play a video with callbacks
+        var options = {
+            successCallback: function () {
+                console.log("Video was closed without error.");
+            },
+            errorCallback: function (errMsg) {
+                console.log("Error! " + errMsg);
+            }
+        };
+        window.plugins.streamingMedia.playVideo(videoUrl, options);
+    }
 
     $ionicModal.fromTemplateUrl('cvFilterModal.html', function (modal) {
         $scope.modalCtrl = modal;
@@ -117,13 +147,38 @@ app.controller('filterModalCtrl', function ($scope) {
 });
 
 // News & announcements view
-app.controller('newsCtrl', function ($scope, $http, $sce) {
+app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject, $ionicNavBarDelegate) {
 
-    $scope.test = {};
+    // Change title based on tab
+    $scope.title = "Announcements";
 
-    $http.get('http://www.colonelby.com/news.html').then(function (response) {
-        $scope.test = $sce.trustAsHtml(response.data);
-    });
+    $ionicNavBarDelegate.align();
+
+    $scope.changeTitle = function (title) {
+        $scope.title = title;
+        $ionicNavBarDelegate.align();
+    }
+
+    $scope.announcements = $firebaseObject(fireRef.child('announcements'));
+
+    $scope.moment = {
+        parseWeekday: function (stamp) {
+            //return moment(stamp, 'x').format('dddd')
+            return moment(stamp, 'x').calendar(null, {
+                sameDay: '[Today]',
+                nextDay: '[Tomorrow]',
+                nextWeek: 'dddd',
+                lastDay: '[Yesterday]',
+                lastWeek: '[Last] dddd',
+                sameElse: 'DD/MM/YYYY'
+            });
+        },
+        parseDate: function (stamp) {
+            return moment(stamp, 'x').format('MMM Do YYYY')
+        }
+    }
+
+    // TWITTER 
 
 });
 
@@ -177,16 +232,16 @@ app.controller('classModalCtrl', function ($scope) {
 });
 
 // Calendar and events control
-app.controller('calendarCtrl', function ($scope, $localStorage, calendarService) {
+app.controller('calendarCtrl', function ($scope, $localStorage, $ionicPopover, calendarService) {
+
     $scope.$storage = $localStorage;
 
     $scope.parseMoment = function (time, format) {
         return moment(time).format(format)
-            
     }
 
-    calendarService.getEvents(moment()).then(function (response) {
-
+    // Main method to generate calendar object
+    var parseCalendar = function (response) {
         $scope.$storage.calendar = {};
 
         var events = calendarService.parseEvents(response);
@@ -194,24 +249,36 @@ app.controller('calendarCtrl', function ($scope, $localStorage, calendarService)
         for (i in events) {
             if (events[i].start.date) {
                 if (!$scope.$storage.calendar[events[i].start.date]) {
-                    var obj = {}
+                    var obj = {};
                     obj[events[i].start.date] = [];
                     $scope.$storage.calendar[events[i].start.date] = obj;
                 }
-                $scope.$storage.calendar[events[i].start.date][events[i].start.date].push({wholeDay: true, summary: events[i].summary});
+                $scope.$storage.calendar[events[i].start.date][events[i].start.date].push({ wholeDay: true, summary: events[i].summary });
             } else if (events[i].start.dateTime) {
                 var date = moment(events[i].start.dateTime).format("YYYY-MM-DD");
                 if (!$scope.$storage.calendar[date]) {
-                    var obj = {}
+                    var obj = {};
                     obj[date] = [];
                     $scope.$storage.calendar[date] = obj;
                 }
-                $scope.$storage.calendar[date][date].push({wholeDay: false, summary: events[i].summary, time:moment(events[i].start.dateTime).format("h:mm a")});
+                $scope.$storage.calendar[date][date].push({ wholeDay: false, summary: events[i].summary, time: moment(events[i].start.dateTime).format("h:mm a") });
             }
-
         }
+    }
 
+    calendarService.getEvents(moment(), moment().add(1, 'month'), 1).then(parseCalendar);
+
+    // Manage menu for switching school calendars
+    $ionicPopover.fromTemplateUrl('templates/calendarmenu.html', {
+        scope: $scope,
+    }).then(function (calendarmenu) {
+        $scope.calendarmenu = calendarmenu;
     });
+
+    $scope.setCalendar = function (type) {
+        calendarService.getEvents(moment(), moment().add(1, 'month'), type).then(parseCalendar);
+        $scope.calendarmenu.hide();
+    }
 
 });
 

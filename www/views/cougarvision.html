@@ -1,21 +1,16 @@
 <ion-view view-title="CougarVision" nav-bar-class="bar-positive" hide-back-button="true" class="bg bg-poly">
+    <ion-content>
 
-    <ion-content padding="true" has-bouncing="true">
-        <ion-refresher pulling-text="Pull to refresh"
-                       on-refresh="refreshContent()">
-        </ion-refresher>
-
-        <div class="list card no-padding" style="margin-top:0;">
+        <div class="list card no-padding">
             <div class="button-bar">
-                <a class="button button-dark button-clear icon-left ion-calendar">Select Date</a>
-                <a class="button button-dark button-clear">This Week</a>
+                <a class="button button-dark button-clear">CV This Week</a>
                 <a class="button button-dark button-clear icon-right ion-android-arrow-dropdown" ng-click="filterModal()">{{filter.selected.name}}</a>
             </div>
         </div>
 
         <div class="no-padding" ng-repeat="episode in episodes | filter:filter.selected.filter track by episode.date">
-            <div class="list card animated fadeInUp no-padding no-margin-bottom">
-                <div class="item light no-padding bg bg-cb">
+            <div class="list card no-padding no-margin-bottom">
+                <div class="item light no-padding bg" ng-class="episode.bg">
                     <div class="fill" style="background-color: rgba(0,0,0,0.4)">
                         <span class="text-large text-light"><i class="icon ion-videocamera"></i>&nbsp;&nbsp;{{episode.day}} Show</span>
                         <span class="item-note stable text-light stable">
@@ -23,15 +18,13 @@
                         </span>
                     </div>
                 </div>
-                <a class="item padding-small" href="#">
+                <a class="item padding-small" ng-click="playVideo(episode.ref)">
                     <span class="dark"><i class="icon ion-play"></i>&nbsp;&nbsp;Watch</span>
-                    <span class="item-note off">
-                        <i class="icon ion-eye"></i>&nbsp;&nbsp;{{episode.views}}
-                    </span>
                 </a>
             </div>
         </div>
     </ion-content>
+
 </ion-view>
 
 <script id="cvFilterModal.html" type="text/ng-template">

@@ -1,12 +1,12 @@
-<ion-view view-title="Classes" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-poly">
-    <ion-content nav-bar-class="bar-positive" padding="true">
+<ion-view view-title="My classes" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-poly">
+    <ion-content>
         <div class="list list-inset">
             <label class="item item-input">
                 <i class="icon ion-search placeholder-icon"></i>
                 <input type="text" placeholder="Search" ng-model="filter">
             </label>
         </div>
-        <div class="list card animated fadeInUp" ng-repeat="class in $storage.classes | filter: filter">
+        <div class="list card" ng-repeat="class in $storage.classes | filter: filter">
             <div class="item item-positive item-icon-left ">
                 <i class="menu-icon icon ion-android-time"></i>Period {{class.name}}
                 <span class="item-note stable">
@@ -20,7 +20,7 @@
                         {{class.subject}}
                         <br><h3 class="dark">{{class.code}}&nbsp;&nbsp;<i class="ion-grid"></i>&nbsp;&nbsp;{{class.room}}</h3>
                     </div>
-                    <a class="button button-small button-outline button-positive no-margin" style="padding:0.4em" ng-click="classModal(class)">EDIT</a>
+                    <a class="button button-small button-clear button-positive no-margin text-large" style="padding:0.4em" ng-click="classModal(class)">EDIT</a>
 
                 </div>
             </div>
@@ -36,6 +36,7 @@
         </ion-header-bar>
         <ion-content>
             <div class="list">
+
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Course Name</span>
                     <input type="text" placeholder="English" ng-model="modalCtrl.temp.subject">
@@ -46,7 +47,7 @@
                 </label>
                 <label class="item item-input item-stacked-label">
                     <span class="input-label">Classroom</span>
-                    <input type="text" placeholder="Room 130" ng-model="modalCtrl.temp.room">
+                    <input type="text" placeholder="130" ng-model="modalCtrl.temp.room">
                 </label>
             </div>
             <div ng-class="{'disabled': !modalCtrl.temp.subject || !modalCtrl.temp.code || !modalCtrl.temp.room}" class="button button-positive button-block" ng-click="hideModalAction()">

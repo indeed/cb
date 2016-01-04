@@ -1,6 +1,6 @@
-<ion-view view-title="Calendar" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-poly-dark">
+<ion-view view-title="Calendar" hide-back-button="true" nav-bar-class="bar-positive" class="bg bg-dark">
     <ion-nav-buttons side="right">
-        <button class="button button-icon" ng-click="doSomething()">
+        <button class="button button-icon" ng-click="calendarmenu.show($event)">
             <i class="icon ion-android-more-vertical"></i>
         </button>
     </ion-nav-buttons>
@@ -19,12 +19,12 @@
                     <div class="padding-top">{{parseMoment(day.$key, "MMM")}}</div>
                 </ion-item>
                     <ion-list class="card col no-padding col-top" style="border-radius:5px;">
-                        <ion-item class="" ng-repeat="event in day[day.$key]" ng-hide="!event.wholeDay">
+                        <ion-item class="" ng-repeat="event in day[day.$key] | filter: filter : false" ng-hide="!event.wholeDay">
                             {{event.summary}}
                             <div class="item-note">All day</div>
                         </ion-item>
 
-                        <ion-item class="" ng-repeat="event in day[day.$key]" ng-hide="event.wholeDay">
+                        <ion-item class="" ng-repeat="event in day[day.$key] | filter: filter : false" ng-hide="event.wholeDay">
                             {{event.summary}}
                             <div class="item-note positive"><i class="icon ion-android-time"></i>&nbsp;&nbsp;{{event.time}}</div>
                         </ion-item>
@@ -34,3 +34,21 @@
         </ion-list>
     </ion-content>
 </ion-view>
+
+<script id="templates/calendarmenu.html" type="text/ng-template">
+    <ion-popover-view>
+        <ion-content>
+            <ion-list>
+                <a class="item" ng-click="setCalendar(1)" href="#">
+                    Main
+                </a>
+                <a class="item" ng-click="setCalendar(2)" href="#">
+                    Athletic
+                </a>
+                <a class="item" ng-click="setCalendar(3)" href="#">
+                    Student Council
+                </a>
+            </ion-list>
+        </ion-content>
+    </ion-popover-view>
+</script>

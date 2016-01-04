@@ -1,13 +1,38 @@
-<ion-view view-title="News" cache-view="false" hide-back-button="true" nav-bar-class="bar-positive">
-        <ion-tabs class="tabs-positive tabs-icon-top tabs-striped">
+<ion-view view-title="{{title}}" hide-back-button="true" nav-bar-class="bar-positive">
+    <ion-tabs class="tabs-positive tabs-icon-top tabs-striped">
 
-            <ion-tab title="Announcements" icon="ion-android-notifications">
-                <ion-content>swag</ion-content>
-            </ion-tab>
+        <ion-tab title="Announcements" icon="ion-android-notifications" on-select="changeTitle('Announcements')">
+            <ion-nav-view class="bg bg-poly">
+                <ion-content class="has-header">
+                    <div class="list card" ng-repeat="(key, value) in announcements | orderByKey: '-' | limitTo: 20">
+                        <div class="item item-positive item-icon-left ">
+                            <i class="menu-icon icon ion-android-notifications"></i>{{moment.parseWeekday(key)}}
+                            <span class="item-note stable">
+                                {{moment.parseDate(key)}}
+                            </span>
+                        </div>
+                        <ion-item class="wrap" ng-repeat="event in value">
+                            {{event}}
+                        </ion-item>
+                    </div>
+                </ion-content>
+            </ion-nav-view>
+        </ion-tab>
 
-            <ion-tab title="Newsletter" icon="ion-ios-paper">
-                <ion-content><div ng-bind-html="test"></div></ion-content>
-            </ion-tab>
+        <ion-tab title="Twitter" icon="ion-social-twitter" on-select="changeTitle('Twitter')">
+            <ion-nav-view>
+                <ion-content class="has-header">
+                    <twitter-timeline>
+                        <a class="twitter-timeline"
+                           data-chrome="nofooter noheader"
+                           data-widget-id="682015553200848896"
+                           data-dnt="true">
+                           Loading Tweets...
+                        </a>
+                    <twitter-timeline>
+                </ion-content>
+            </ion-nav-view>
+        </ion-tab>
 
-        </ion-tabs>
+    </ion-tabs>
 </ion-view>

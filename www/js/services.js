@@ -2,9 +2,12 @@
 
 //Google API get public calendar
 var gapiCalendarMain = "https://www.googleapis.com/calendar/v3/calendars/ocdsb.ca_9dul7c0nu4poqkgbhsfu0qe2t0@group.calendar.google.com/events?key=AIzaSyB4JbJ8B3jPBr-uwqLkF6p-qD7lzBIadgw";
+var gapiCalendarAthletics = "https://www.googleapis.com/calendar/v3/calendars/ocdsb.ca_cmipkc2crgaprhaj683kll566k@group.calendar.google.com/events?key=AIzaSyB4JbJ8B3jPBr-uwqLkF6p-qD7lzBIadgw";
+var gapiCalendarStudco = "https://www.googleapis.com/calendar/v3/calendars/ocdsb.ca_lavjjef25v724l1l932e1rk2o0@group.calendar.google.com/events?key=AIzaSyB4JbJ8B3jPBr-uwqLkF6p-qD7lzBIadgw";
 
 // Service for calendar and events
 app.factory('calendarService', function ($http) {
+
     return {
 
         //Parses event data to find the school cycle day
@@ -28,10 +31,26 @@ app.factory('calendarService', function ($http) {
         },
 
         //Gets events for days after certain start date
-        getEvents: function (time) {
-            return $http.get(gapiCalendarMain, {
+        getEvents: function (start, end, type) {
+
+            var gapi;
+
+            switch(type) {
+                case 1:
+                    gapi = gapiCalendarMain;
+                    break;
+                case 2:
+                    gapi = gapiCalendarAthletics;
+                    break;
+                case 3:
+                    gapi = gapiCalendarStudco;
+                    break;
+            }
+
+            return $http.get(gapi, {
                 params: {
-                    timeMin: time.startOf('day').format(),
+                    timeMin: start.startOf('day').format(),
+                    timeMax: end.startOf('day').format(),
                     orderBy: "startTime",
                     singleEvents: true
                 }
@@ -50,7 +69,7 @@ app.factory('calendarService', function ($http) {
 app.factory('classService', function () {
 
     return {
-        getPeriod: function (time) {
+        getPeriod: function (time, day) {
 
             // times for each period
             var p1, p2, lunch, p3, p4;
@@ -61,20 +80,37 @@ app.factory('classService', function () {
             p4 = time.clone().hour(15).minute(16);
 
             //check if time is before the end of each period
-            if (time.isBefore(p1, 'minute')) {
-                return 1
-            } else if (time.isBefore(p2, 'minute')) {
-                return 2
-            } else if (time.isBefore(lunch, 'minute')) {
-                return 0
-            } else if (time.isBefore(p3, 'minute')) {
-                return 3
-            } else if (time.isBefore(p4, 'minute')) {
-                return 4
+            if (day == "Day 1" || day == "Day 2") {
+                if (time.isBefore(p1, 'minute')) {
+                    return {p: 1, c: 1}
+                } else if (time.isBefore(p2, 'minute')) {
+                    return { p: 2, c: 2}
+                } else if (time.isBefore(lunch, 'minute')) {
+                    return { p: 0, c: 0 }
+                } else if (time.isBefore(p3, 'minute')) {
+                    return { p: 3, c: 3 }
+                } else if (time.isBefore(p4, 'minute')) {
+                    return { p: 4, c: 4 }
+                } else {
+                    return { p: 5, c: 0 }
+                }
             } else {
-                return 5
+                if (time.isBefore(p1, 'minute')) {
+                    return { p: 1, c: 2 }
+                } else if (time.isBefore(p2, 'minute')) {
+                    return { p: 2, c: 1 }
+                } else if (time.isBefore(lunch, 'minute')) {
+                    return { p: 0, c: 0 }
+                } else if (time.isBefore(p3, 'minute')) {
+                    return { p: 3, c: 4 }
+                } else if (time.isBefore(p4, 'minute')) {
+                    return { p: 4, c: 3 }
+                } else {
+                    return { p: 5, c: 0 }
+                }
             }
         },
     }
 
 })
+
