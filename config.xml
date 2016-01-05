@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="com.colonelby.cbnews" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>CB News</name>
-  <description>
-    Colonel By news, events, CougarVision, and more.
+  <description>&#xD;
+    Colonel By news, events, CougarVision, and more.&#xD;
   </description>
-  <author email="shunyu.rao@gmail.com" href="">
-    Shun Yu Rao
+  <author email="shunyu.rao@gmail.com" href="">&#xD;
+    Shun Yu Rao&#xD;
   </author>
   <content src="index.html"/>
   <access origin="*"/>
@@ -16,7 +16,7 @@
   <preference name="android-minSdkVersion" value="16"/>
   <preference name="BackupWebStorage" value="none"/>
   <preference name="SplashScreen" value="screen"/>
-  <preference name="SplashScreenDelay" value="1000"/>
+  <preference name="SplashScreenDelay" value="2000"/>
   <feature name="StatusBar">
     <param name="ios-package" value="CDVStatusBar" onload="true"/>
   </feature>
