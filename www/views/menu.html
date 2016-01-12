@@ -46,8 +46,10 @@
             </span>
             <h1 class="title">Settings</h1>
         </ion-header-bar>
-        <ion-content>
-            <div class="list">
+        <ion-content padding="true">
+            <div class="list padding">
+                <a class="button button-positive button-outline button-block icon-left ion-android-calendar" ng-click="clearCalendar()">Clear calendar cache</a>
+                <a class="button button-positive button-block button-outline icon-left ion-android-cancel" ng-click="showConfirm()">Reset class schedule</a>
             </div>
         </ion-content>
     </div>

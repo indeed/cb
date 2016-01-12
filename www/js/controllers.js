@@ -72,11 +72,35 @@ app.controller('menuCtrl', function ($scope, $ionicHistory, $interval, $localSto
 });
 
 // Settings view
-app.controller('settingsModalCtrl', function ($scope) {
+app.controller('settingsModalCtrl', function ($scope, $ionicPopup, $localStorage) {
 
     $scope.hideModal = function () {
         $scope.modalCtrl.hide();
     };
+
+    $scope.showConfirm = function () {
+        var confirmPopup = $ionicPopup.confirm({
+            title: 'Reset class schedule',
+            template: 'Are you sure you want to clear all your classes?'
+        });
+        confirmPopup.then(function (res) {
+            if (res) {
+                $localStorage.classes = [
+                    { name: "1A", day: 1, period: 1, subject: "None", code: "No class", room: "" },
+                    { name: "1B", day: 1, period: 2, subject: "None", code: "No class", room: "" },
+                    { name: "1C", day: 1, period: 3, subject: "None", code: "No class", room: "" },
+                    { name: "1D", day: 1, period: 4, subject: "None", code: "No class", room: "" },
+                    { name: "2A", day: 2, period: 1, subject: "None", code: "No class", room: "" },
+                    { name: "2B", day: 2, period: 2, subject: "None", code: "No class", room: "" },
+                    { name: "2C", day: 2, period: 3, subject: "None", code: "No class", room: "" },
+                    { name: "2D", day: 2, period: 4, subject: "None", code: "No class", room: "" },]
+            }
+        });
+    };
+
+    $scope.clearCalendar = function () {
+        $localStorage.calendar = {};
+    }
 
 });
 

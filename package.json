@@ -16,15 +16,23 @@
   },
   "cordovaPlugins": [
     "cordova-plugin-device",
-    "cordova-plugin-console",
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
     {
       "locator": "https://github.com/apache/cordova-plugin-statusbar.git",
       "id": "cordova-plugin-statusbar"
+    },
+    {
+      "locator": "https://github.com/nchutchind/Streaming-Media-Cordova-Plugin.git",
+      "id": "com.hutchind.cordova.plugins.streamingmedia"
     }
   ],
   "cordovaPlatforms": [
-    "android"
+    "android",
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    }
   ]
 }
