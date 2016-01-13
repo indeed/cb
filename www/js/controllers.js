@@ -93,7 +93,7 @@ app.controller('settingsModalCtrl', function ($scope, $ionicPopup, $localStorage
                     { name: "2A", day: 2, period: 1, subject: "None", code: "No class", room: "" },
                     { name: "2B", day: 2, period: 2, subject: "None", code: "No class", room: "" },
                     { name: "2C", day: 2, period: 3, subject: "None", code: "No class", room: "" },
-                    { name: "2D", day: 2, period: 4, subject: "None", code: "No class", room: "" },]
+                    { name: "2D", day: 2, period: 4, subject: "None", code: "No class", room: "" }, ]
             }
         });
     };
@@ -171,7 +171,7 @@ app.controller('filterModalCtrl', function ($scope) {
 });
 
 // News & announcements view
-app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject, $ionicNavBarDelegate) {
+app.controller('newsCtrl', function ($scope, $http, $ionicPlatform, $firebaseObject, $ionicNavBarDelegate, TwitterREST) {
 
     // Change title based on tab
     $scope.title = "Announcements";
@@ -200,9 +200,16 @@ app.controller('newsCtrl', function ($scope, $http, $sce, $firebaseObject, $ioni
         parseDate: function (stamp) {
             return moment(stamp, 'x').format('MMM Do YYYY')
         }
-    }
+    };
 
-    // TWITTER 
+    TwitterREST.sync().then(function (tweets) {
+        console.log(tweets);
+        $scope.tweets = tweets;
+    });
+
+    $scope.innapBrowser = function (value) {
+        window.open(value, '_blank');
+    };
 
 });
 

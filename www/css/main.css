@@ -234,3 +234,20 @@
         top: 64px;
     }
 }
+
+/* TWITTER */
+
+.item.twtr p {
+    white-space: pre-wrap;
+}
+
+.item.twtr small {
+    color: #8899a6;
+}
+
+.item.twtr .time:before {
+    content: "\00b7";
+}
+.twtr-hashtag, .twtr-hyperlink, .twtr-atreply {
+    color: #226699;
+}

@@ -4,7 +4,7 @@
 // 'cb' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'cb.controllers' is found in controllers.js
-var app = angular.module('cb', ['ionic', 'cb.controllers', 'cb.services', 'cb.utils', 'ngTouch', 'ngAnimate', 'ngStorage', 'angular-toArrayFilter', 'firebase', 'ngtweet'])
+var app = angular.module('cb', ['ionic', 'cb.controllers', 'cb.services', 'cb.utils', 'cb.filters', 'ngTouch', 'ngAnimate', 'ngStorage', 'ngCordova', 'angular-toArrayFilter', 'firebase' ])
 
 app.run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -23,9 +23,32 @@ app.run(function ($ionicPlatform) {
 
 });
 
-app.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+app.config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, $compileProvider) {
 
     $ionicConfigProvider.tabs.position('bottom');
+
+    $compileProvider.directive('compile', function ($compile) {
+        // directive factory creates a link function
+        return function (scope, element, attrs) {
+            scope.$watch(
+                function (scope) {
+                    // watch the 'compile' expression for changes
+                    return scope.$eval(attrs.compile);
+                },
+                function (value) {
+                    // when the 'compile' expression changes
+                    // assign it into the current DOM
+                    element.html(value);
+
+                    // compile the new DOM and link it to the current
+                    // scope.
+                    // NOTE: we only compile .childNodes so that
+                    // we don't get into infinite loop compiling ourselves
+                    $compile(element.contents())(scope);
+                }
+            );
+        };
+    });
 
     $stateProvider
       .state('app', {

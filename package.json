@@ -25,7 +25,9 @@
     {
       "locator": "https://github.com/nchutchind/Streaming-Media-Cordova-Plugin.git",
       "id": "com.hutchind.cordova.plugins.streamingmedia"
-    }
+    },
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-console"
   ],
   "cordovaPlatforms": [
     "android",
